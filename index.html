@@ -13,7 +13,6 @@
         }
         * { box-sizing: border-box; }
 
-        /* FIX 1: Allow page to scroll if questions or answers are very long */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             background-color: var(--dark-bg); color: #f8fafc; 
@@ -35,21 +34,18 @@
         
         h1 { font-size: 2.5rem; color: var(--cisco-blue); margin-bottom: 10px; }
 
-        /* FIX 2: Allow question text to wrap and breathe */
         .q-text { 
             font-size: 1.5rem; font-weight: 700; margin-bottom: 30px; 
             text-align: left; border-left: 4px solid var(--cisco-blue); 
             padding-left: 20px; line-height: 1.4;
         }
 
-        /* FIX 3: Improved Grid - 2 columns on desktop, 1 on mobile */
         .options-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             gap: 15px; 
         }
 
-        /* FIX 4: The Button Wrap Fix */
         .option-btn { 
             background: rgba(30, 41, 59, 0.7); 
             border: 1px solid var(--border-color); 
@@ -61,16 +57,13 @@
             font-size: 1rem; 
             color: #cbd5e1; 
             text-align: left;
-            
-            /* Crucial lines for long text: */
-            white-space: normal;       /* Allows text to go to next line */
-            word-wrap: break-word;     /* Breaks very long technical words */
+            white-space: normal;
+            word-wrap: break-word;
             display: flex; 
             align-items: center;
-            min-height: 70px;          /* Minimum size, but will grow if needed */
+            min-height: 70px;
         }
 
-        /* FIX 5: Mobile adjustments */
         @media (max-width: 768px) {
             .options-grid { grid-template-columns: 1fr; }
             h1 { font-size: 1.8rem; }
@@ -95,8 +88,6 @@
     </style>
 </head>
 <body>
-    </body>
-</html>
 
     <div class="app-container">
         <div class="system-bar">
@@ -108,7 +99,7 @@
             <div class="content-box">
                 <div id="start-screen">
                     <h1>Welcome, Ye Min Aung</h1>
-                    <p style="color: var(--text-dim); margin-bottom: 30px;">Initialize 10-packet training sequence from the 50-question master bank.</p>
+                    <p style="color: var(--text-dim); margin-bottom: 30px;">Initialize 10-packet training sequence from the master bank.</p>
                     <button class="btn-action" onclick="startTraining()">Begin Training</button>
                 </div>
 
@@ -131,7 +122,7 @@
 
         <div class="console-footer">
             <div>USER: YE MIN AUNG</div>
-            <div id="progress-text">OFFLINE_SYNC</div>
+            <div id="progress-text">ONLINE_READY</div>
             <div>STRIKE: <span id="score-text">0</span>%</div>
         </div>
     </div>
@@ -187,56 +178,56 @@
             { "q": "Which layer is the 'Interface' layer in the TCP/IP model?", "a": ["Application", "Transport", "Internet", "Network Access"], "c": 3 },
             { "q": "What is the bit length of a MAC address?", "a": ["32 bits", "48 bits", "64 bits", "128 bits"], "c": 1 },
             { "q": "Which command enters Global Configuration mode?", "a": ["enable", "configure terminal", "config t", "Both B and C"], "c": 3 },
-{ "q": "Which wireless frequency band offers more channels and higher speeds but less range?", "a": ["2.4 GHz", "5 GHz", "900 MHz", "60 GHz"], "c": 1 },
-{ "q": "What is the primary function of a WLC in a network?", "a": ["Routing packets", "Centralized management of APs", "Encrypting web traffic", "Assigning DHCP addresses"], "c": 1 },
-{ "q": "Which JSON character is used to separate key-value pairs?", "a": [";", ":", ",", "-"], "c": 1 },
-{ "q": "What is the decimal equivalent of the binary 10110111?", "a": ["183", "192", "211", "175"], "c": 0 },
-{ "q": "Which data format is commonly used by APIs like REST?", "a": ["HTML", "JSON", "TXT", "DOCX"], "c": 1 },
-{ "q": "Which protocol is used by the 'traceroute' command on a Cisco router?", "a": ["TCP", "UDP", "ICMP", "SNMP"], "c": 2 },
-{ "q": "What is the maximum hop count for RIPv2?", "a": ["10", "15", "16", "255"], "c": 1 },
-{ "q": "Which command sets the priority of a switch to become the Root Bridge?", "a": ["spanning-tree vlan 1 priority 0", "root bridge enable", "switchport priority 0", "spanning-tree root primary"], "c": 0 },
-{ "q": "What is the Northbound API used for?", "a": ["Communication between Controller and Apps", "Communication between Controller and Switches", "Routing between VLANs", "Connecting to the ISP"], "c": 0 },
-{ "q": "Which HTTP method is used to create a new resource in a REST API?", "a": ["GET", "PUT", "POST", "DELETE"], "c": 2 },
-{ "q": "Which address is used to send data to all hosts on a local subnet?", "a": ["0.0.0.0", "127.0.0.1", "255.255.255.255", "192.168.1.0"], "c": 2 },
-{ "q": "Which type of ACL uses the numbers 1-99?", "a": ["Standard ACL", "Extended ACL", "Named ACL", "VTY ACL"], "c": 0 },
-{ "q": "What is the purpose of the 'vtp transparent' mode?", "a": ["Forwards VTP ads but doesn't sync", "Syncs with the server", "Disables VLANs", "Acts as the VTP Primary"], "c": 0 },
-{ "q": "Which command shows the OSPF neighbor relationships?", "a": ["show ip ospf neighbor", "show ip neighbor", "show ip route ospf", "show ospf status"], "c": 0 },
-{ "q": "What is the default priority for an HSRP group?", "a": ["1", "50", "100", "255"], "c": 2 },
-{ "q": "Which port does NTP use?", "a": ["53", "67", "123", "161"], "c": 2 },
-{ "q": "What is the floating static route used for?", "a": ["Load balancing", "Backup route", "Primary route", "Routing loops"], "c": 1 },
-{ "q": "Which protocol is used for centralized Authentication, Authorization, and Accounting?", "a": ["SSH", "RADIUS", "SNMP", "NTP"], "c": 1 },
-{ "q": "What does a '0.0.0.0 0.0.0.0' route represent?", "a": ["Local Loopback", "Default Route", "Broadcast", "Network ID"], "c": 1 },
-{ "q": "What is the wildcard mask for a /28 subnet?", "a": ["0.0.0.15", "0.0.0.255", "0.0.0.7", "0.0.0.31"], "c": 0 },
-{ "q": "Which layer in the Leaf-Spine architecture do end-devices connect to?", "a": ["Spine Layer", "Leaf Layer", "Core Layer", "Access Layer"], "c": 1 },
-{ "q": "What does the 'K' values in EIGRP calculate?", "a": ["Path", "Metric", "Priority", "AD"], "c": 1 },
-{ "q": "Which command is used to see the license status on a Cisco router?", "a": ["show version", "show license", "show running-config", "show flash"], "c": 1 },
-{ "q": "What is the purpose of 'PortFast' on a switch port?", "a": ["Increases speed", "Skips STP states for immediate access", "Disables STP", "Prevents loops"], "c": 1 },
-{ "q": "Which type of fiber cable is best for long distances?", "a": ["Multimode", "Single-mode", "UTP", "STP"], "c": 1 },
-{ "q": "Which command allows a range of interfaces to be configured at once?", "a": ["interface range ...", "interface group ...", "int set ...", "config interface ..."], "c": 0 },
-{ "q": "What is the default hello timer for OSPF on an Ethernet link?", "a": ["5 seconds", "10 seconds", "30 seconds", "60 seconds"], "c": 1 },
-{ "q": "Which code 200 represents what in HTTP?", "a": ["Created", "Bad Request", "OK", "Not Found"], "c": 2 },
-{ "q": "What is a 'Native VLAN' used for?", "a": ["Untagged traffic on a trunk", "Management traffic", "Security traffic", "Voice traffic"], "c": 0 },
-{ "q": "Which tool is used for infrastructure automation and uses 'Playbooks'?", "a": ["Chef", "Puppet", "Ansible", "Terraform"], "c": 2 },
-{ "q": "What is the AD of an Internal BGP route?", "a": ["20", "110", "170", "200"], "c": 3 },
-{ "q": "Which port does DHCP use for the Server?", "a": ["67", "68", "69", "70"], "c": 0 },
-{ "q": "Which OSPF area is required for all other areas to connect to?", "a": ["Area 1", "Area 10", "Area 0", "Area 51"], "c": 2 },
-{ "q": "What is the length of an IPv4 address?", "a": ["16 bits", "32 bits", "64 bits", "128 bits"], "c": 1 },
-{ "q": "Which command enables a trunk port to carry only specific VLANs?", "a": ["switchport trunk allowed vlan ...", "switchport mode trunk", "vlan allowed ...", "trunk vlan ..."], "c": 0 },
-{ "q": "What is the binary of 255?", "a": ["11111111", "00000000", "10101010", "11001100"], "c": 0 },
-{ "q": "What is the main advantage of SDN?", "a": ["Better hardware", "Centralized control and agility", "Faster cables", "Lower electricity use"], "c": 1 },
-{ "q": "Which protocol is used to monitor network devices?", "a": ["SNMP", "SMTP", "NTP", "HTTP"], "c": 0 },
-{ "q": "What is the size of the MAC address OUI (Organizationally Unique Identifier)?", "a": ["12 bits", "24 bits", "48 bits", "64 bits"], "c": 1 },
-{ "q": "Which command shows the EIGRP topology table?", "a": ["show ip eigrp topology", "show ip route eigrp", "show eigrp status", "show ip neighbor"], "c": 0 },
-{ "q": "Which address is used for a router's own loopback?", "a": ["10.0.0.1", "172.16.0.1", "192.168.1.1", "127.0.0.1"], "c": 3 },
-{ "q": "What does a DHCP Discover message use as a destination MAC?", "a": ["Router MAC", "Server MAC", "FF:FF:FF:FF:FF:FF", "00:00:00:00:00:00"], "c": 2 },
-{ "q": "Which command turns on the 'web-server' on a Cisco device?", "a": ["ip http server", "web enable", "service http", "http server start"], "c": 0 },
-{ "q": "What is the maximum number of usable IPs in a /30?", "a": ["1", "2", "4", "6"], "c": 1 },
-{ "q": "Which technology allows multiple physical switches to act as one?", "a": ["VLAN", "EtherChannel", "StackWise", "HSRP"], "c": 2 },
-{ "q": "Which layer of the OSI model is responsible for framing?", "a": ["Physical", "Data Link", "Network", "Transport"], "c": 1 },
-{ "q": "What is the administrative distance of a Summary Route in EIGRP?", "a": ["5", "20", "90", "170"], "c": 0 },
-{ "q": "Which command is used to troubleshoot DNS issues?", "a": ["nslookup", "ping", "tracert", "ipconfig"], "c": 0 },
-{ "q": "Which protocol is used for secure web traffic?", "a": ["HTTP", "HTTPS", "FTP", "SSH"], "c": 1 },
-{ "q": "What is the purpose of 'Dynamic ARP Inspection' (DAI)?", "a": ["Routing", "Speed", "Security against ARP spoofing", "IP assignment"], "c": 2 },
+            { "q": "Which wireless frequency band offers more channels and higher speeds but less range?", "a": ["2.4 GHz", "5 GHz", "900 MHz", "60 GHz"], "c": 1 },
+            { "q": "What is the primary function of a WLC in a network?", "a": ["Routing packets", "Centralized management of APs", "Encrypting web traffic", "Assigning DHCP addresses"], "c": 1 },
+            { "q": "Which JSON character is used to separate key-value pairs?", "a": [";", ":", ",", "-"], "c": 1 },
+            { "q": "What is the decimal equivalent of the binary 10110111?", "a": ["183", "192", "211", "175"], "c": 0 },
+            { "q": "Which data format is commonly used by APIs like REST?", "a": ["HTML", "JSON", "TXT", "DOCX"], "c": 1 },
+            { "q": "Which protocol is used by the 'traceroute' command on a Cisco router?", "a": ["TCP", "UDP", "ICMP", "SNMP"], "c": 2 },
+            { "q": "What is the maximum hop count for RIPv2?", "a": ["10", "15", "16", "255"], "c": 1 },
+            { "q": "Which command sets the priority of a switch to become the Root Bridge?", "a": ["spanning-tree vlan 1 priority 0", "root bridge enable", "switchport priority 0", "spanning-tree root primary"], "c": 0 },
+            { "q": "What is the Northbound API used for?", "a": ["Communication between Controller and Apps", "Communication between Controller and Switches", "Routing between VLANs", "Connecting to the ISP"], "c": 0 },
+            { "q": "Which HTTP method is used to create a new resource in a REST API?", "a": ["GET", "PUT", "POST", "DELETE"], "c": 2 },
+            { "q": "Which address is used to send data to all hosts on a local subnet?", "a": ["0.0.0.0", "127.0.0.1", "255.255.255.255", "192.168.1.0"], "c": 2 },
+            { "q": "Which type of ACL uses the numbers 1-99?", "a": ["Standard ACL", "Extended ACL", "Named ACL", "VTY ACL"], "c": 0 },
+            { "q": "What is the purpose of the 'vtp transparent' mode?", "a": ["Forwards VTP ads but doesn't sync", "Syncs with the server", "Disables VLANs", "Acts as the VTP Primary"], "c": 0 },
+            { "q": "Which command shows the OSPF neighbor relationships?", "a": ["show ip ospf neighbor", "show ip neighbor", "show ip route ospf", "show ospf status"], "c": 0 },
+            { "q": "What is the default priority for an HSRP group?", "a": ["1", "50", "100", "255"], "c": 2 },
+            { "q": "Which port does NTP use?", "a": ["53", "67", "123", "161"], "c": 2 },
+            { "q": "What is the floating static route used for?", "a": ["Load balancing", "Backup route", "Primary route", "Routing loops"], "c": 1 },
+            { "q": "Which protocol is used for centralized Authentication, Authorization, and Accounting?", "a": ["SSH", "RADIUS", "SNMP", "NTP"], "c": 1 },
+            { "q": "What does a '0.0.0.0 0.0.0.0' route represent?", "a": ["Local Loopback", "Default Route", "Broadcast", "Network ID"], "c": 1 },
+            { "q": "What is the wildcard mask for a /28 subnet?", "a": ["0.0.0.15", "0.0.0.255", "0.0.0.7", "0.0.0.31"], "c": 0 },
+            { "q": "Which layer in the Leaf-Spine architecture do end-devices connect to?", "a": ["Spine Layer", "Leaf Layer", "Core Layer", "Access Layer"], "c": 1 },
+            { "q": "What does the 'K' values in EIGRP calculate?", "a": ["Path", "Metric", "Priority", "AD"], "c": 1 },
+            { "q": "Which command is used to see the license status on a Cisco router?", "a": ["show version", "show license", "show running-config", "show flash"], "c": 1 },
+            { "q": "What is the purpose of 'PortFast' on a switch port?", "a": ["Increases speed", "Skips STP states for immediate access", "Disables STP", "Prevents loops"], "c": 1 },
+            { "q": "Which type of fiber cable is best for long distances?", "a": ["Multimode", "Single-mode", "UTP", "STP"], "c": 1 },
+            { "q": "Which command allows a range of interfaces to be configured at once?", "a": ["interface range ...", "interface group ...", "int set ...", "config interface ..."], "c": 0 },
+            { "q": "What is the default hello timer for OSPF on an Ethernet link?", "a": ["5 seconds", "10 seconds", "30 seconds", "60 seconds"], "c": 1 },
+            { "q": "Which code 200 represents what in HTTP?", "a": ["Created", "Bad Request", "OK", "Not Found"], "c": 2 },
+            { "q": "What is a 'Native VLAN' used for?", "a": ["Untagged traffic on a trunk", "Management traffic", "Security traffic", "Voice traffic"], "c": 0 },
+            { "q": "Which tool is used for infrastructure automation and uses 'Playbooks'?", "a": ["Chef", "Puppet", "Ansible", "Terraform"], "c": 2 },
+            { "q": "What is the AD of an Internal BGP route?", "a": ["20", "110", "170", "200"], "c": 3 },
+            { "q": "Which port does DHCP use for the Server?", "a": ["67", "68", "69", "70"], "c": 0 },
+            { "q": "Which OSPF area is required for all other areas to connect to?", "a": ["Area 1", "Area 10", "Area 0", "Area 51"], "c": 2 },
+            { "q": "What is the length of an IPv4 address?", "a": ["16 bits", "32 bits", "64 bits", "128 bits"], "c": 1 },
+            { "q": "Which command enables a trunk port to carry only specific VLANs?", "a": ["switchport trunk allowed vlan ...", "switchport mode trunk", "vlan allowed ...", "trunk vlan ..."], "c": 0 },
+            { "q": "What is the binary of 255?", "a": ["11111111", "00000000", "10101010", "11001100"], "c": 0 },
+            { "q": "What is the main advantage of SDN?", "a": ["Better hardware", "Centralized control and agility", "Faster cables", "Lower electricity use"], "c": 1 },
+            { "q": "Which protocol is used to monitor network devices?", "a": ["SNMP", "SMTP", "NTP", "HTTP"], "c": 0 },
+            { "q": "What is the size of the MAC address OUI (Organizationally Unique Identifier)?", "a": ["12 bits", "24 bits", "48 bits", "64 bits"], "c": 1 },
+            { "q": "Which command shows the EIGRP topology table?", "a": ["show ip eigrp topology", "show ip route eigrp", "show eigrp status", "show ip neighbor"], "c": 0 },
+            { "q": "Which address is used for a router's own loopback?", "a": ["10.0.0.1", "172.16.0.1", "192.168.1.1", "127.0.0.1"], "c": 3 },
+            { "q": "What does a DHCP Discover message use as a destination MAC?", "a": ["Router MAC", "Server MAC", "FF:FF:FF:FF:FF:FF", "00:00:00:00:00:00"], "c": 2 },
+            { "q": "Which command turns on the 'web-server' on a Cisco device?", "a": ["ip http server", "web enable", "service http", "http server start"], "c": 0 },
+            { "q": "What is the maximum number of usable IPs in a /30?", "a": ["1", "2", "4", "6"], "c": 1 },
+            { "q": "Which technology allows multiple physical switches to act as one?", "a": ["VLAN", "EtherChannel", "StackWise", "HSRP"], "c": 2 },
+            { "q": "Which layer of the OSI model is responsible for framing?", "a": ["Physical", "Data Link", "Network", "Transport"], "c": 1 },
+            { "q": "What is the administrative distance of a Summary Route in EIGRP?", "a": ["5", "20", "90", "170"], "c": 0 },
+            { "q": "Which command is used to troubleshoot DNS issues?", "a": ["nslookup", "ping", "tracert", "ipconfig"], "c": 0 },
+            { "q": "Which protocol is used for secure web traffic?", "a": ["HTTP", "HTTPS", "FTP", "SSH"], "c": 1 },
+            { "q": "What is the purpose of 'Dynamic ARP Inspection' (DAI)?", "a": ["Routing", "Security against ARP spoofing", "IP assignment", "Speed"], "c": 1 },
             { "q": "What does LLDP stand for?", "a": ["Low Level Data Protocol", "Link Layer Discovery Protocol", "Local Line Data Path", "Layer Logical Data Port"], "c": 1 }
         ];
 
@@ -256,6 +247,7 @@
             document.getElementById('end-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
             currentIdx = 0; score = 0; lastResults = [];
+            document.getElementById('score-text').innerText = "0";
             loadQuestion();
         }
 
@@ -289,6 +281,9 @@
                 document.querySelectorAll('.option-btn')[correct].classList.add('correct');
                 lastResults.push(false);
             }
+            
+            // Fixed strike calculation: (Current Score / Total Questions in a round) * 100
+            // Since a round is always 10 questions, this ensures 10/10 = 100%
             document.getElementById('score-text').innerText = Math.round((score / 10) * 100);
             document.getElementById('next-btn').classList.remove('hidden');
         }
@@ -302,7 +297,8 @@
         function finish() {
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('end-screen').classList.remove('hidden');
-            document.getElementById('final-stats').innerText = `Engineer Ye Min Aung: ${score}/10 Correct.`;
+            const finalPercent = Math.round((score / 10) * 100);
+            document.getElementById('final-stats').innerText = `Engineer Ye Min Aung: ${score}/10 Correct (${finalPercent}%).`;
         }
 
         function smartRestart() {
@@ -323,6 +319,4 @@
         }
     </script>
 </body>
-
-</html> 
-
+</html>
