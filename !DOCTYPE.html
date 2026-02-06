@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCNA Master Training | Ye Min Aung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cisco-blue: #049fd9; --terminal-green: #00ff41; --dark-bg: #020617;
+            --panel-bg: #0f172a; --border-color: #1e293b; --text-dim: #94a3b8;
+            --correct: #10b981; --wrong: #ef4444;
+        }
+        * { box-sizing: border-box; }
+
+        /* FIX 1: Allow page to scroll if questions or answers are very long */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: var(--dark-bg); color: #f8fafc; 
+            font-family: 'Inter', sans-serif; 
+            overflow-y: auto; 
+        }
+
+        .app-container { display: flex; flex-direction: column; width: 100vw; min-height: 100vh; }
+        
+        .system-bar { 
+            background: #1e293b; padding: 12px 25px; display: flex; 
+            justify-content: space-between; align-items: center; 
+            border-bottom: 2px solid var(--cisco-blue);
+            position: sticky; top: 0; z-index: 10;
+        }
+
+        .viewport { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .content-box { width: 100%; max-width: 1000px; text-align: center; padding: 20px 0; }
+        
+        h1 { font-size: 2.5rem; color: var(--cisco-blue); margin-bottom: 10px; }
+
+        /* FIX 2: Allow question text to wrap and breathe */
+        .q-text { 
+            font-size: 1.5rem; font-weight: 700; margin-bottom: 30px; 
+            text-align: left; border-left: 4px solid var(--cisco-blue); 
+            padding-left: 20px; line-height: 1.4;
+        }
+
+        /* FIX 3: Improved Grid - 2 columns on desktop, 1 on mobile */
+        .options-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+
+        /* FIX 4: The Button Wrap Fix */
+        .option-btn { 
+            background: rgba(30, 41, 59, 0.7); 
+            border: 1px solid var(--border-color); 
+            padding: 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            font-family: 'Fira Code', monospace; 
+            font-size: 1rem; 
+            color: #cbd5e1; 
+            text-align: left;
+            
+            /* Crucial lines for long text: */
+            white-space: normal;       /* Allows text to go to next line */
+            word-wrap: break-word;     /* Breaks very long technical words */
+            display: flex; 
+            align-items: center;
+            min-height: 70px;          /* Minimum size, but will grow if needed */
+        }
+
+        /* FIX 5: Mobile adjustments */
+        @media (max-width: 768px) {
+            .options-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+            .q-text { font-size: 1.2rem; }
+            .viewport { padding: 10px; }
+        }
+
+        .option-btn:hover { background: #1e293b; border-color: var(--cisco-blue); transform: translateY(-2px); }
+        .correct { background: var(--correct) !important; color: white; border-color: #059669; }
+        .wrong { background: var(--wrong) !important; color: white; border-color: #dc2626; }
+        
+        .console-footer { 
+            background: #0f172a; padding: 15px 30px; 
+            border-top: 1px solid var(--border-color); 
+            display: flex; justify-content: space-between; 
+            font-family: 'Fira Code', monospace; font-size: 0.8rem;
+            position: sticky; bottom: 0;
+        }
+
+        .btn-action { background: var(--cisco-blue); color: white; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    </body>
+</html>
+
+    <div class="app-container">
+        <div class="system-bar">
+            <div id="status-line">● System: Ready</div>
+            <div style="font-family: 'Fira Code';">CCNA_LOCAL_VAULT_v1.0</div>
+        </div>
+
+        <div class="viewport">
+            <div class="content-box">
+                <div id="start-screen">
+                    <h1>Welcome, Ye Min Aung</h1>
+                    <p style="color: var(--text-dim); margin-bottom: 30px;">Initialize 10-packet training sequence from the 50-question master bank.</p>
+                    <button class="btn-action" onclick="startTraining()">Begin Training</button>
+                </div>
+
+                <div id="quiz-screen" class="hidden">
+                    <div class="q-text" id="question-text"></div>
+                    <div id="options-grid" class="options-grid"></div>
+                    <div style="margin-top: 50px; text-align: right;">
+                        <button id="next-btn" class="btn-action hidden" onclick="nextQuestion()">Next Packet</button>
+                    </div>
+                </div>
+
+                <div id="end-screen" class="hidden">
+                    <h1>Results Analyzed</h1>
+                    <p id="final-stats" style="font-size: 1.5rem; color: var(--terminal-green);"></p>
+                    <p style="color: var(--text-dim); margin-bottom: 20px;">Incorrect packets will stay in the queue. Correct ones will be replaced.</p>
+                    <button class="btn-action" onclick="smartRestart()">Smart Restart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="console-footer">
+            <div>USER: YE MIN AUNG</div>
+            <div id="progress-text">OFFLINE_SYNC</div>
+            <div>STRIKE: <span id="score-text">0</span>%</div>
+        </div>
+    </div>
+
+    <script>
+        const masterBank = [
+            { "q": "Which OSI layer is responsible for end-to-end error recovery and flow control?", "a": ["Network", "Data Link", "Session", "Transport"], "c": 3 },
+            { "q": "What is the administrative distance of OSPF?", "a": ["90", "110", "120", "1"], "c": 1 },
+            { "q": "Which command reveals the MAC address table on a Cisco switch?", "a": ["show ip arp", "show mac address-table", "show int status", "show running-config"], "c": 1 },
+            { "q": "What is the default subnet mask for a Class B network?", "a": ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.252"], "c": 1 },
+            { "q": "Which port does HTTPS use?", "a": ["80", "21", "23", "443"], "c": 3 },
+            { "q": "Which protocol is used to find a hardware address from a known IP address?", "a": ["DNS", "ARP", "DHCP", "ICMP"], "c": 1 },
+            { "q": "What is the administrative distance of a static route?", "a": ["0", "1", "5", "20"], "c": 1 },
+            { "q": "How many usable hosts are in a /27 subnet?", "a": ["14", "30", "62", "126"], "c": 1 },
+            { "q": "Which field in an IPv4 header is used to prevent infinite loops?", "a": ["Checksum", "TTL", "Protocol", "Flags"], "c": 1 },
+            { "q": "Which OSPF state signifies that full adjacency has been established?", "a": ["Init", "2-Way", "ExStart", "Full"], "c": 3 },
+            { "q": "Which protocol operates at the OSI Layer 3?", "a": ["Ethernet", "TCP", "IPv4", "HTTP"], "c": 2 },
+            { "q": "What is the administrative distance of EIGRP?", "a": ["90", "110", "120", "170"], "c": 0 },
+            { "q": "Which CIDR notation represents the mask 255.255.255.240?", "a": ["/24", "/26", "/28", "/30"], "c": 2 },
+            { "q": "Which port number is utilized by SSH?", "a": ["21", "22", "23", "25"], "c": 1 },
+            { "q": "What is the purpose of a VLAN?", "a": ["Increase bandwidth", "Reduce collision domains", "Reduce broadcast domains", "Routing between networks"], "c": 2 },
+            { "q": "Which routing protocol uses the Dijkstra algorithm?", "a": ["RIP", "EIGRP", "OSPF", "BGP"], "c": 2 },
+            { "q": "Which layer handles reliable data transfer and flow control?", "a": ["Layer 2", "Layer 3", "Layer 4", "Layer 7"], "c": 2 },
+            { "q": "Which address is used for OSPF All-DR-Routers multicast?", "a": ["224.0.0.5", "224.0.0.6", "224.0.0.9", "224.0.0.10"], "c": 1 },
+            { "q": "Which command is used to set the secret password for privileged mode?", "a": ["enable password", "enable secret", "password secret", "service password-encryption"], "c": 1 },
+            { "q": "What is the standard Ethernet frame size (MTU)?", "a": ["64 bytes", "512 bytes", "1500 bytes", "9000 bytes"], "c": 2 },
+            { "q": "Which switching method checks the CRC before forwarding the frame?", "a": ["Cut-through", "Fragment-free", "Store-and-forward", "Fast-forwarding"], "c": 2 },
+            { "q": "Which protocol provides a method to secure VTY lines?", "a": ["SSH", "Telnet", "HTTP", "SNMP"], "c": 0 },
+            { "q": "What is the default aging time for a MAC address table entry?", "a": ["60 seconds", "300 seconds", "600 seconds", "Infinity"], "c": 1 },
+            { "q": "Which command allows you to see the spanning-tree status for VLAN 10?", "a": ["show vlan 10", "show spanning-tree vlan 10", "show stp 10", "show running-config"], "c": 1 },
+            { "q": "Which address is a valid IPv6 link-local address?", "a": ["2001::1", "FE80::1", "FF02::1", "::1"], "c": 1 },
+            { "q": "What does a Router use to make a forwarding decision?", "a": ["MAC Table", "Routing Table", "ARP Cache", "VLAN Database"], "c": 1 },
+            { "q": "What is the default priority for Spanning Tree Protocol?", "a": ["1", "4096", "32768", "65535"], "c": 2 },
+            { "q": "Which command displays the current status of interfaces in brief?", "a": ["show interface", "show ip interface brief", "show status", "show ip route"], "c": 1 },
+            { "q": "Which Cisco hierarchy layer is responsible for fast transport?", "a": ["Access", "Distribution", "Core", "Data Link"], "c": 2 },
+            { "q": "Which protocol is used for EtherChannel Cisco proprietary negotiation?", "a": ["LACP", "PAgP", "STP", "VTP"], "c": 1 },
+            { "q": "Which port is used by BGP?", "a": ["161", "179", "443", "500"], "c": 1 },
+            { "q": "Which command saves the configuration from RAM to NVRAM?", "a": ["copy run start", "write memory", "save config", "Both A and B"], "c": 3 },
+            { "q": "What is the administrative distance of External EIGRP?", "a": ["90", "110", "120", "170"], "c": 3 },
+            { "q": "Which mechanism shares one public IP with multiple internal hosts?", "a": ["Static NAT", "Dynamic NAT", "PAT", "Routing"], "c": 2 },
+            { "q": "What is the multicast address for EIGRP?", "a": ["224.0.0.5", "224.0.0.6", "224.0.0.9", "224.0.0.10"], "c": 3 },
+            { "q": "Which command creates a VLAN?", "a": ["vlan 10", "set vlan 10", "make vlan 10", "interface vlan 10"], "c": 0 },
+            { "q": "Which STP state only receives BPDUs and populates the MAC table?", "a": ["Blocking", "Listening", "Learning", "Forwarding"], "c": 2 },
+            { "q": "Which command enables OSPF routing on a router?", "a": ["router ospf 1", "ospf enable", "ip ospf 1", "network ospf 1"], "c": 0 },
+            { "q": "What is the prefix length of the subnet mask 255.255.240.0?", "a": ["/18", "/20", "/22", "/24"], "c": 1 },
+            { "q": "Which protocol uses Port 53?", "a": ["SMTP", "DNS", "FTP", "POP3"], "c": 1 },
+            { "q": "Which range is designated for private Class A IP addresses?", "a": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.1/8"], "c": 0 },
+            { "q": "What is the IPv6 loopback address?", "a": ["127.0.0.1", "::1", "FE80::1", "FF02::1"], "c": 1 },
+            { "q": "Which command checks the trunking status of switch ports?", "a": ["show vlan", "show interfaces trunk", "show ip interface brief", "show switchport"], "c": 1 },
+            { "q": "What is the AD of RIP?", "a": ["90", "110", "120", "1"], "c": 2 },
+            { "q": "Which VTP mode allows a switch to synchronize but not create VLANs?", "a": ["Client", "Server", "Transparent", "Off"], "c": 0 },
+            { "q": "Which address type is 2001:db8:85a3::8a2e:370:7334?", "a": ["IPv4", "IPv6 Global Unicast", "IPv6 Link-Local", "MAC"], "c": 1 },
+            { "q": "Which layer is the 'Interface' layer in the TCP/IP model?", "a": ["Application", "Transport", "Internet", "Network Access"], "c": 3 },
+            { "q": "What is the bit length of a MAC address?", "a": ["32 bits", "48 bits", "64 bits", "128 bits"], "c": 1 },
+            { "q": "Which command enters Global Configuration mode?", "a": ["enable", "configure terminal", "config t", "Both B and C"], "c": 3 },
+{ "q": "Which wireless frequency band offers more channels and higher speeds but less range?", "a": ["2.4 GHz", "5 GHz", "900 MHz", "60 GHz"], "c": 1 },
+{ "q": "What is the primary function of a WLC in a network?", "a": ["Routing packets", "Centralized management of APs", "Encrypting web traffic", "Assigning DHCP addresses"], "c": 1 },
+{ "q": "Which JSON character is used to separate key-value pairs?", "a": [";", ":", ",", "-"], "c": 1 },
+{ "q": "What is the decimal equivalent of the binary 10110111?", "a": ["183", "192", "211", "175"], "c": 0 },
+{ "q": "Which data format is commonly used by APIs like REST?", "a": ["HTML", "JSON", "TXT", "DOCX"], "c": 1 },
+{ "q": "Which protocol is used by the 'traceroute' command on a Cisco router?", "a": ["TCP", "UDP", "ICMP", "SNMP"], "c": 2 },
+{ "q": "What is the maximum hop count for RIPv2?", "a": ["10", "15", "16", "255"], "c": 1 },
+{ "q": "Which command sets the priority of a switch to become the Root Bridge?", "a": ["spanning-tree vlan 1 priority 0", "root bridge enable", "switchport priority 0", "spanning-tree root primary"], "c": 0 },
+{ "q": "What is the Northbound API used for?", "a": ["Communication between Controller and Apps", "Communication between Controller and Switches", "Routing between VLANs", "Connecting to the ISP"], "c": 0 },
+{ "q": "Which HTTP method is used to create a new resource in a REST API?", "a": ["GET", "PUT", "POST", "DELETE"], "c": 2 },
+{ "q": "Which address is used to send data to all hosts on a local subnet?", "a": ["0.0.0.0", "127.0.0.1", "255.255.255.255", "192.168.1.0"], "c": 2 },
+{ "q": "Which type of ACL uses the numbers 1-99?", "a": ["Standard ACL", "Extended ACL", "Named ACL", "VTY ACL"], "c": 0 },
+{ "q": "What is the purpose of the 'vtp transparent' mode?", "a": ["Forwards VTP ads but doesn't sync", "Syncs with the server", "Disables VLANs", "Acts as the VTP Primary"], "c": 0 },
+{ "q": "Which command shows the OSPF neighbor relationships?", "a": ["show ip ospf neighbor", "show ip neighbor", "show ip route ospf", "show ospf status"], "c": 0 },
+{ "q": "What is the default priority for an HSRP group?", "a": ["1", "50", "100", "255"], "c": 2 },
+{ "q": "Which port does NTP use?", "a": ["53", "67", "123", "161"], "c": 2 },
+{ "q": "What is the floating static route used for?", "a": ["Load balancing", "Backup route", "Primary route", "Routing loops"], "c": 1 },
+{ "q": "Which protocol is used for centralized Authentication, Authorization, and Accounting?", "a": ["SSH", "RADIUS", "SNMP", "NTP"], "c": 1 },
+{ "q": "What does a '0.0.0.0 0.0.0.0' route represent?", "a": ["Local Loopback", "Default Route", "Broadcast", "Network ID"], "c": 1 },
+{ "q": "What is the wildcard mask for a /28 subnet?", "a": ["0.0.0.15", "0.0.0.255", "0.0.0.7", "0.0.0.31"], "c": 0 },
+{ "q": "Which layer in the Leaf-Spine architecture do end-devices connect to?", "a": ["Spine Layer", "Leaf Layer", "Core Layer", "Access Layer"], "c": 1 },
+{ "q": "What does the 'K' values in EIGRP calculate?", "a": ["Path", "Metric", "Priority", "AD"], "c": 1 },
+{ "q": "Which command is used to see the license status on a Cisco router?", "a": ["show version", "show license", "show running-config", "show flash"], "c": 1 },
+{ "q": "What is the purpose of 'PortFast' on a switch port?", "a": ["Increases speed", "Skips STP states for immediate access", "Disables STP", "Prevents loops"], "c": 1 },
+{ "q": "Which type of fiber cable is best for long distances?", "a": ["Multimode", "Single-mode", "UTP", "STP"], "c": 1 },
+{ "q": "Which command allows a range of interfaces to be configured at once?", "a": ["interface range ...", "interface group ...", "int set ...", "config interface ..."], "c": 0 },
+{ "q": "What is the default hello timer for OSPF on an Ethernet link?", "a": ["5 seconds", "10 seconds", "30 seconds", "60 seconds"], "c": 1 },
+{ "q": "Which code 200 represents what in HTTP?", "a": ["Created", "Bad Request", "OK", "Not Found"], "c": 2 },
+{ "q": "What is a 'Native VLAN' used for?", "a": ["Untagged traffic on a trunk", "Management traffic", "Security traffic", "Voice traffic"], "c": 0 },
+{ "q": "Which tool is used for infrastructure automation and uses 'Playbooks'?", "a": ["Chef", "Puppet", "Ansible", "Terraform"], "c": 2 },
+{ "q": "What is the AD of an Internal BGP route?", "a": ["20", "110", "170", "200"], "c": 3 },
+{ "q": "Which port does DHCP use for the Server?", "a": ["67", "68", "69", "70"], "c": 0 },
+{ "q": "Which OSPF area is required for all other areas to connect to?", "a": ["Area 1", "Area 10", "Area 0", "Area 51"], "c": 2 },
+{ "q": "What is the length of an IPv4 address?", "a": ["16 bits", "32 bits", "64 bits", "128 bits"], "c": 1 },
+{ "q": "Which command enables a trunk port to carry only specific VLANs?", "a": ["switchport trunk allowed vlan ...", "switchport mode trunk", "vlan allowed ...", "trunk vlan ..."], "c": 0 },
+{ "q": "What is the binary of 255?", "a": ["11111111", "00000000", "10101010", "11001100"], "c": 0 },
+{ "q": "What is the main advantage of SDN?", "a": ["Better hardware", "Centralized control and agility", "Faster cables", "Lower electricity use"], "c": 1 },
+{ "q": "Which protocol is used to monitor network devices?", "a": ["SNMP", "SMTP", "NTP", "HTTP"], "c": 0 },
+{ "q": "What is the size of the MAC address OUI (Organizationally Unique Identifier)?", "a": ["12 bits", "24 bits", "48 bits", "64 bits"], "c": 1 },
+{ "q": "Which command shows the EIGRP topology table?", "a": ["show ip eigrp topology", "show ip route eigrp", "show eigrp status", "show ip neighbor"], "c": 0 },
+{ "q": "Which address is used for a router's own loopback?", "a": ["10.0.0.1", "172.16.0.1", "192.168.1.1", "127.0.0.1"], "c": 3 },
+{ "q": "What does a DHCP Discover message use as a destination MAC?", "a": ["Router MAC", "Server MAC", "FF:FF:FF:FF:FF:FF", "00:00:00:00:00:00"], "c": 2 },
+{ "q": "Which command turns on the 'web-server' on a Cisco device?", "a": ["ip http server", "web enable", "service http", "http server start"], "c": 0 },
+{ "q": "What is the maximum number of usable IPs in a /30?", "a": ["1", "2", "4", "6"], "c": 1 },
+{ "q": "Which technology allows multiple physical switches to act as one?", "a": ["VLAN", "EtherChannel", "StackWise", "HSRP"], "c": 2 },
+{ "q": "Which layer of the OSI model is responsible for framing?", "a": ["Physical", "Data Link", "Network", "Transport"], "c": 1 },
+{ "q": "What is the administrative distance of a Summary Route in EIGRP?", "a": ["5", "20", "90", "170"], "c": 0 },
+{ "q": "Which command is used to troubleshoot DNS issues?", "a": ["nslookup", "ping", "tracert", "ipconfig"], "c": 0 },
+{ "q": "Which protocol is used for secure web traffic?", "a": ["HTTP", "HTTPS", "FTP", "SSH"], "c": 1 },
+{ "q": "What is the purpose of 'Dynamic ARP Inspection' (DAI)?", "a": ["Routing", "Speed", "Security against ARP spoofing", "IP assignment"], "c": 2 },
+            { "q": "What does LLDP stand for?", "a": ["Low Level Data Protocol", "Link Layer Discovery Protocol", "Local Line Data Path", "Layer Logical Data Port"], "c": 1 }
+        ];
+
+        let currentActiveQuestions = [];
+        let currentIdx = 0;
+        let score = 0;
+        let locked = false;
+        let lastResults = [];
+
+        function startTraining() {
+            currentActiveQuestions = masterBank.sort(() => 0.5 - Math.random()).slice(0, 10);
+            showQuiz();
+        }
+
+        function showQuiz() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            currentIdx = 0; score = 0; lastResults = [];
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            locked = false;
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('progress-text').innerText = `PACKET ${currentIdx + 1}/10`;
+            const data = currentActiveQuestions[currentIdx];
+            document.getElementById('question-text').innerText = data.q;
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            data.a.forEach((opt, i) => {
+                const b = document.createElement('div');
+                b.className = 'option-btn';
+                b.innerText = `${String.fromCharCode(65 + i)}: ${opt}`;
+                b.onclick = () => check(b, i);
+                grid.appendChild(b);
+            });
+        }
+
+        function check(el, i) {
+            if (locked) return;
+            locked = true;
+            const correct = currentActiveQuestions[currentIdx].c;
+            if (i === correct) {
+                el.classList.add('correct');
+                score++;
+                lastResults.push(true);
+            } else {
+                el.classList.add('wrong');
+                document.querySelectorAll('.option-btn')[correct].classList.add('correct');
+                lastResults.push(false);
+            }
+            document.getElementById('score-text').innerText = Math.round((score / 10) * 100);
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx < 10) loadQuestion();
+            else finish();
+        }
+
+        function finish() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+            document.getElementById('final-stats').innerText = `Engineer Ye Min Aung: ${score}/10 Correct.`;
+        }
+
+        function smartRestart() {
+            let newSet = [];
+            let availableBank = masterBank.filter(q => !currentActiveQuestions.includes(q));
+            availableBank.sort(() => 0.5 - Math.random());
+
+            for (let i = 0; i < 10; i++) {
+                if (lastResults[i] === false) {
+                    newSet.push(currentActiveQuestions[i]);
+                } else {
+                    if (availableBank.length > 0) newSet.push(availableBank.pop());
+                    else newSet.push(masterBank[Math.floor(Math.random() * masterBank.length)]);
+                }
+            }
+            currentActiveQuestions = newSet;
+            showQuiz();
+        }
+    </script>
+</body>
+</html>
